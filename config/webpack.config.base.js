@@ -9,7 +9,7 @@ const webpack = require('webpack')
 
 module.exports = {
   entry: {
-    main: path.resolve(__dirname, '../src/main'),
+    main: ["babel-polyfill", path.resolve(__dirname, '../src/main')],
     vendor: ['moment', 'vis/dist/vis.min.js']
   },
   output: {

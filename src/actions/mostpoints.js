@@ -26,11 +26,11 @@ export const receiveTopPhonecalls = (topPhonecalls) => ({
 
 const getTopGeoValue = (values) => {
   let result = reduce(values, function (result, value) {
-    ((result[(value.doc.latitude).toString() + ',' + (value.doc.longitude).toString()]) || (result[(value.doc.latitude).toString() + ',' + (value.doc.longitude).toString()] = [])).push(
+    ((result[(value.latitude).toString() + ',' + (value.longitude).toString()]) || (result[(value.latitude).toString() + ',' + (value.longitude).toString()] = [])).push(
       {
-        start: value.doc.timestamp.replace(/T|Z/g, ' '),
-        msisdn: value.doc.msisdn,
-        _id: value.doc._id
+        start: value.timestamp.replace(/T|Z/g, ' '),
+        msisdn: value.msisdn,
+        _id: value._id
       })
     return result
   }, [])
@@ -49,13 +49,13 @@ const getTopGeoValue = (values) => {
 }
 const getTopPhoneValue = (values) => {
   let result = reduce(values, function (result, value) {
-    ((result[(value.doc.latitude).toString() + ',' + (value.doc.longitude).toString()]) || (result[(value.doc.latitude).toString() + ',' + (value.doc.longitude).toString()] = [])).push(
+    ((result[(value.latitude).toString() + ',' + (value.longitude).toString()]) || (result[(value.latitude).toString() + ',' + (value.longitude).toString()] = [])).push(
       {
-        start: value.doc.timestamp.replace(/T|Z/g, ' '),
-        msisdn: value.doc.msisdn,
-        partner: value.doc.partner,
-        typeMessage: value.doc.type,
-        _id: value.doc._id
+        start: value.timestamp.replace(/T|Z/g, ' '),
+        msisdn: value.msisdn,
+        partner: value.partner,
+        typeMessage: value.type,
+        _id: value._id
       })
     return result
   }, [])
@@ -74,62 +74,52 @@ const getTopPhoneValue = (values) => {
 }
 export const fetchTopGeolocations = () => {
   return dispatch => {
-    $.ajax(getGeoPointURL, {
-      type: 'GET',
-      beforeSend: function (request) {
-        request.setRequestHeader('Authorization', 'Bearer ' + cozyOptions.token)
-      },
-      dataType: 'json',
-      success: (data) => {
+    cozy.client.data.findAll(GEOLOCATION_DOCTYPE)
+    .then((data) => {
         let result = []
-        if (data && data.rows) {
-          result = data.rows.filter(function (obj) {
-            return obj.doc.latitude !== 'NULL' && obj.doc.latitude !== '' &&
-            obj.doc.longitude !== 'NULL' && obj.doc.longitude !== '' && obj.doc.latitude !== undefined &&
-            obj.doc.longitude !== undefined
+        if (data && data.length) {
+          result = data.filter(function (obj) {
+            return obj.latitude !== 'NULL' && obj.latitude !== '' &&
+            obj.longitude !== 'NULL' && obj.longitude !== '' && obj.latitude !== undefined &&
+            obj.longitude !== undefined
           })
         }
         let topGeolocations = getTopGeoValue(result)
         dispatch(receiveTopGeolocations(topGeolocations))
-      },
-      error: (error) => {
+    })
+    .catch((error) => {
         dispatch({
           type: FETCH_TOP_GEOLOCATIONS_FAILURE,
           error
         })
-      }
     })
   }
 }
 export const fetchTopPhonecalls = () => {
   return dispatch => {
-    $.ajax(getPhoneCommunicationLogURL, {
-      type: 'GET',
-      beforeSend: function (request) {
-        request.setRequestHeader('Authorization', 'Bearer ' + cozyOptions.token)
-      },
-      dataType: 'json',
-      success: (data) => {
+    cozy.client.data.findAll(PHONECALL_DOCTYPE)
+    .then((data) => {
+        console.log(data)
         let result = []
-        if (data && data.rows) {
-          result = data.rows.filter(function (obj) {
-            return obj.doc.latitude !== 'NULL' && obj.doc.latitude !== '' &&
-            obj.doc.longitude !== 'NULL' && obj.doc.longitude !== '' && obj.doc.latitude !== undefined &&
-            obj.doc.longitude !== undefined
+        if (data && data.length) {
+          result = data.filter(function (obj) {
+            return obj.latitude !== 'NULL' && obj.latitude !== '' &&
+            obj.longitude !== 'NULL' && obj.longitude !== '' && obj.latitude !== undefined &&
+            obj.longitude !== undefined
           })
         }
         let topPhonecalls = getTopPhoneValue(result)
         dispatch(receiveTopPhonecalls(topPhonecalls))
-      },
-      error: (error) => {
+    })
+    .catch((error) => {
         dispatch({
           type: FETCH_TOP_PHONECALLS_FAILURE,
           error
         })
-      }
     })
   }
 }
+
 // export const fetchTopGeolocations = (geoIndexByDate) => {
 //   return async dispatch => {
 //     const options = {

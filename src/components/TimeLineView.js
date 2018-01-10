@@ -17,17 +17,17 @@ class TimeLineView extends Component {
           </Col>
           <Col sm={6}>
             <ButtonGroup bsSize='small' className='pull-right'>
-              <Button bsStyle='success' onClick={zoomInTimeLine}><i className='fa fa-plus' aria-hidden='true' /></Button>
-              <Button bsStyle='success' onClick={zoomOutTimeLine}><i className='fa fa-minus' aria-hidden='true' /></Button>
-              <Button bsStyle='success' onClick={moveLeftTimeLine}><i className='fa fa-chevron-left' aria-hidden='true' /></Button>
-              <Button bsStyle='success' onClick={moveRightTimeLine}><i className='fa fa-chevron-right' aria-hidden='true' /></Button>
+              <Button bsStyle='success' onClick={zoomInTimeLine}><i className='fa fa-plus' /></Button>
+              <Button bsStyle='success' onClick={zoomOutTimeLine}><i className='fa fa-minus' /></Button>
+              <Button bsStyle='success' onClick={moveLeftTimeLine}><i className='fa fa-chevron-left' /></Button>
+              <Button bsStyle='success' onClick={moveRightTimeLine}><i className='fa fa-chevron-right' /></Button>
             </ButtonGroup>
           </Col>
         </Row>
         <Row>
           <Col sm={12}>
-            <TimeLine geolocations={geolocations} phonecalls={phonecalls} 
-            date={date} selectDataByDate={selectDataByDate} 
+            <TimeLine geolocations={geolocations} phonecalls={phonecalls}
+            date={date} selectDataByDate={selectDataByDate}
             mango={mango} onChangeCenter={this.props.onChangeCenter}/>
           </Col>
         </Row>

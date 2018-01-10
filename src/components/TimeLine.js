@@ -85,14 +85,14 @@ class TimeLine extends Component {
     timeline.off('click', this.onSelectMarker)
   }
   onSelectDataByDate (properties) {
-    if (properties.byUser) {
+    // if (properties.byUser) { 
       this.setState({isFirstFetch: false})
       let start = formatDate(timeline.getWindow().start)
       let end = formatDate(timeline.getWindow().end)
       let geoIndexByDate = this.props.mango.geolocationsIndexByDate
       let phoneIndexByDate = this.props.mango.phonecallsIndexByDate
       this.props.selectDataByDate(start, end, geoIndexByDate, phoneIndexByDate)
-    }
+    // }
   }
   onSelectMarker (properties) {
     let item_id = properties.items
@@ -104,7 +104,7 @@ class TimeLine extends Component {
         var longitude = Number(items[i].longitude)
         this.props.onChangeCenter(latitude, longitude)
       }
-    }    
+    }
   }
   initTimeline () {
     let container = document.getElementById('mytimeline')
