@@ -10,7 +10,7 @@
     "lint": "standard 'src/**/*.js' 'src/**/*.jsx'",
     "clean": "rm -rf build",
     "copy:manifest": "install -m0644 package.json README.md build",
-    "prebuild": "npm-run-all lint clean",
+    "prebuild": "#deactivated npm-run-all lint clean",
     "postbuild": "npm run copy:manifest",
     "prewatch": "npm run clean"
   },
