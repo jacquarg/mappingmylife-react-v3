@@ -9,6 +9,18 @@ export const receivePhonecalls = (phonecalls) => ({
   type: RECEIVE_PHONECALLS,
   phonecalls
 })
+
+const selectorCraWithLoc = { '$and': [
+  { 'longitude': { '$exists': true } },
+  { 'latitude': { '$exists': true } },
+  { 'latitude': {'$ne': null} },
+  { 'longitude': {'$ne': null} },
+  { 'latitude': {'$ne': 'NULL'} },
+  { 'longitude': {'$ne': 'NULL'} },
+  { 'latitude': {'$ne': ''} },
+  { 'longitude': {'$ne': ''} },
+]}
+
 const fetchMorePhonecalls = (phoneIndexByDate, start, end, skip, previousData) => {
   const options = {
     selector: {
@@ -19,19 +31,8 @@ const fetchMorePhonecalls = (phoneIndexByDate, start, end, skip, previousData) =
         {
           'timestamp': {'$lte': end + 'T23:59:59Z'}
         },
-        {
-          'latitude': {'$ne': 'NULL'}
-        },
-        {
-          'longitude': {'$ne': 'NULL'}
-        },
-        {
-          'latitude': {'$ne': ''}
-        },
-        {
-          'longitude': {'$ne': ''}
-        }
-      ]},
+        selectorCraWithLoc
+    ]},
     fields: ['_id', 'timestamp', 'latitude', 'longitude', 'msisdn', 'type', 'partner'],
     descending: true,
     wholeResponse: true,
@@ -78,18 +79,7 @@ export const fetchPhonecalls = (phoneIndexByDate, start, end) => {
           {
             'timestamp': {'$lte': end + 'T23:59:59Z'}
           },
-          {
-            'latitude': {'$ne': 'NULL'}
-          },
-          {
-            'longitude': {'$ne': 'NULL'}
-          },
-          {
-            'latitude': {'$ne': ''}
-          },
-          {
-            'longitude': {'$ne': ''}
-          }
+          selectorCraWithLoc
         ]},
       fields: ['_id', 'timestamp', 'latitude', 'longitude', 'msisdn', 'type', 'partner'],
       descending: true,
@@ -132,18 +122,7 @@ export const fetchPhonecallsLatest = (phoneIndexByDate) => {
           {
             'timestamp': {'$gt': null}
           },
-          {
-            'latitude': {'$ne': 'NULL'}
-          },
-          {
-            'longitude': {'$ne': 'NULL'}
-          },
-          {
-            'latitude': {'$ne': ''}
-          },
-          {
-            'longitude': {'$ne': ''}
-          }
+          selectorCraWithLoc
         ]
       },
       fields: ['_id', 'timestamp', 'latitude', 'longitude', 'msisdn', 'type', 'partner'],

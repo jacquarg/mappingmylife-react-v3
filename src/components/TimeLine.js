@@ -85,7 +85,7 @@ class TimeLine extends Component {
     timeline.off('click', this.onSelectMarker)
   }
   onSelectDataByDate (properties) {
-    // if (properties.byUser) { 
+    // if (properties.byUser) {
       this.setState({isFirstFetch: false})
       let start = formatDate(timeline.getWindow().start)
       let end = formatDate(timeline.getWindow().end)
@@ -121,19 +121,18 @@ class TimeLine extends Component {
     if (geoItems.length > 0 || phoneItems.length > 0) {
       timeline.setItems(items)
       if (this.state.isFirstFetch) {
+        let lastDay = new Date().toISOString()
+
         if (geoItems.length > 0 && phoneItems.length > 0) {
-          let startDay = (geoItems[geoItems.length - 1].start > phoneItems[phoneItems.length - 1].start) ? phoneItems[phoneItems.length - 1].start : geoItems[geoItems.length - 1].start
-          let lastDay = (geoItems[0].start > phoneItems[0].start) ? geoItems[0].start : phoneItems[0].start
-          timeline.setWindow(startDay, lastDay)
+          lastDay = (geoItems[0].start > phoneItems[0].start) ? geoItems[0].start : phoneItems[0].start
         } else if (geoItems.length > 0) {
-          let startDay = geoItems[geoItems.length - 1].start
-          let lastDay = geoItems[0].start
-          timeline.setWindow(startDay, lastDay)
+          lastDay = geoItems[0].start
         } else if (phoneItems.length > 0) {
-          let startDay = phoneItems[phoneItems.length - 1].start
-          let lastDay = phoneItems[0].start
-          timeline.setWindow(startDay, lastDay)
+          lastDay = phoneItems[0].start
         }
+        let startDay = new Date(new Date(lastDay).getTime() - 2 * 24 * 60 * 60 * 1000).toISOString()
+        timeline.setWindow(startDay, lastDay)
+
       }
     }
     return (
