@@ -1,6 +1,6 @@
 {
   "name": "Mapping-My-Life",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "main": "src/main.js",
   "private": true,
   "scripts": {

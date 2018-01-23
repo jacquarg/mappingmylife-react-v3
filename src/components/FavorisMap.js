@@ -5,6 +5,7 @@ import isEmpty from 'lodash/isEmpty'
 import { MAPBOXURL } from '../constants/config'
 import { geoIcon, phoneIcon, homeIcon, workIcon, sportIcon, shopIcon, otherIcon } from './Icons'
 import { Button } from 'react-bootstrap'
+import geoCenter from '../libs/geocenter'
 import 'leaflet-css'
 import '../styles/map.css'
 
@@ -32,28 +33,34 @@ class FavorisMap extends Component {
       showPopup: !this.state.showPopup
     })
   }
-  getIconType (latitude, longitude, defaultIcon) {
-    let key = latitude.toString() + longitude.toString()
+
+  getCategory (item) {
+    let key = item.latitude.toString() + item.longitude.toString()
+    if (!isEmpty(this.props.favorisPoint) &&
+      this.props.favorisPoint[key] !== undefined && this.props.favorisPoint[key]['category'] !== undefined) {
+      return this.props.favorisPoint[key]['category']
+    }
+  }
+
+  getIconType (item, defaultIcon) {
     let typeIcon = defaultIcon
-    if (!(isEmpty(this.props.favorisPoint))) {
-      if (this.props.favorisPoint[key] !== undefined && this.props.favorisPoint[key]['category'] !== undefined) {
-        let category = this.props.favorisPoint[key]['category']
-        switch (category) {
-          case 'maison':
-            typeIcon = homeIcon
-            break
-          case 'travail':
-            typeIcon = workIcon
-            break
-          case 'sport':
-            typeIcon = sportIcon
-            break
-          case 'marche':
-            typeIcon = shopIcon
-            break
-          default:
-            typeIcon = otherIcon
-        }
+    let category = this.getCategory(item)
+    if (category) {
+      switch (category) {
+        case 'maison':
+          typeIcon = homeIcon
+          break
+        case 'travail':
+          typeIcon = workIcon
+          break
+        case 'sport':
+          typeIcon = sportIcon
+          break
+        case 'marche':
+          typeIcon = shopIcon
+          break
+        default:
+          typeIcon = otherIcon
       }
     }
     return typeIcon
@@ -61,11 +68,12 @@ class FavorisMap extends Component {
   renderGeoMarkers (geoLog) {
     if (geoLog.length > 0) {
       return geoLog.map((item, i) => {
-        let typeIcon = this.getIconType(item.latitude, item.longitude, geoIcon)
+        let typeIcon = this.getIconType(item, geoIcon)
         return (
           <Marker key={i} position={[item.latitude, item.longitude]} icon={typeIcon} onClick={this.props.changeLatLng}>
             <Popup>
               <div>
+                <h5><b>{this.getCategory(item)}</b></h5>
                 <h5>Nombre de geolocation = {item.geoInfo.length}</h5>
                 <div style={{ display: this.state.showPopup ? 'block' : 'none' }} className='popupContent'>
                   {item.geoInfo.map((item, i) =>
@@ -88,11 +96,12 @@ class FavorisMap extends Component {
   renderPhoneMarkers (phoneLog) {
     if (phoneLog.length > 0) {
       return phoneLog.map((item, i) => {
-        let typeIcon = this.getIconType(item.latitude, item.longitude, phoneIcon)
+        let typeIcon = this.getIconType(item, phoneIcon)
         return (
           <Marker key={i} position={[item.latitude, item.longitude]} icon={typeIcon} onClick={this.props.changeLatLng}>
             <Popup>
               <div>
+                <h5><b>{this.getCategory(item)}</b></h5>
                 <h5>Nombre de communications = {item.phoneInfo.length}</h5>
                 <div style={{ display: this.state.showPopup ? 'block' : 'none' }} className='popupContent'>
                   {item.phoneInfo.map((item, i) =>
@@ -119,6 +128,11 @@ class FavorisMap extends Component {
     const {geolocations, phonecalls} = this.props
     const geomarkers = this.renderGeoMarkers(geolocations)
     const phonemarkers = this.renderPhoneMarkers(phonecalls)
+
+    if (geolocations.length > 0 || phonecalls.length > 0) {
+      // TODO: it may not be very react-like.
+      this.state.center = geoCenter([].concat(geolocations, phonecalls))
+    }
 
     return (
       <div>

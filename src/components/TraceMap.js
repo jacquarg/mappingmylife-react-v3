@@ -74,6 +74,8 @@ class TraceMap extends Component {
         mapLayers.addLayer(startMarker).addTo(map)
         mapLayers.addLayer(endMarker).addTo(map)
       }
+
+      map.fitBounds(latlngs)
     }
   }
 
