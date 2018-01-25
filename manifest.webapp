@@ -3,6 +3,7 @@
   "slug": "app",
   "icon": "images/Logo.png",
   "description": "",
+  "category": "partners",
   "source": "https://github.com/",
   "developer": {
     "name": "Shuwei ZHANG",
