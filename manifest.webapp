@@ -1,0 +1,86 @@
+{
+  "name": "MappingMyLife",
+  "slug": "app",
+  "icon": "images/Logo.png",
+  "description": "",
+  "category": "partners",
+  "source": "https://github.com/",
+  "developer": {
+    "name": "Shuwei ZHANG",
+    "url": "https:zhangshuwei.github.io"
+  },
+  "default_locale": "en",
+  "locales": {
+    "fr": {
+      "description": ""
+    }
+  },
+  "routes": {
+    "/": {
+      "folder": "/",
+      "index": "index.html",
+      "public": false
+    },
+    "/map": {
+      "folder": "/",
+      "index": "index.html",
+      "public": false
+    },
+    "/trace": {
+      "folder": "/",
+      "index": "index.html",
+      "public": false
+    },
+    "/help": {
+      "folder": "/",
+      "index": "index.html",
+      "public": false
+    }
+  },
+  "version": "1.0.5",
+  "licence": "",
+  "permissions": {
+    "apps": {
+      "description": "Required by the cozy-bar to display the icons of the apps",
+      "type": "io.cozy.apps",
+      "verbs": [
+        "GET"
+      ]
+    },
+    "settings": {
+      "description": "Required by the cozy-bar display Claudy and to know which applications are coming soon",
+      "type": "io.cozy.settings",
+      "verbs": [
+        "GET"
+      ]
+    },
+    "pointfavoris": {
+      "description": "Required for favorite place",
+      "type": "fr.orange.pointfavoris",
+      "verbs": [
+        "GET",
+        "POST",
+        "PUT",
+        "DELETE"
+      ]
+    },
+    "geopoint": {
+      "description": "Required to manage geolocation information",
+      "type": "fr.orange.geopoint",
+      "verbs": [
+        "GET",
+        "POST",
+        "PUT"
+      ]
+    },
+    "phonecommunication": {
+      "description": "Required to manage communications information",
+      "type": "fr.orange.phonecommunicationlog",
+      "verbs": [
+        "GET",
+        "POST",
+        "PUT"
+      ]
+    }
+  }
+}
